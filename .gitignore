@@ -1,0 +1,28 @@
+# Python standard
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables and keys
+.env
+.env.*
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.out
+*.err
+
+# Virtual environments
+venv/
+env/
+
+# Miscellaneous
+*.swp
+*~
