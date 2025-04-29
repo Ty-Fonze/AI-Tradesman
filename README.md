@@ -1,6 +1,6 @@
 # 📈 AI Tradesman - Your Stock Market Assistant
 
-AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides actionable insights, portfolio management tools, and educational guidance for traders of all levels.
+AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides critical insights for trading and investment decisions.
 
 ---
 
@@ -30,6 +30,8 @@ AI Tradesman is an AI-powered assistant designed to empower traders with smarter
    ```bash
    pip install -r requirements.txt
    ```
+   > **Note**: The `yfinance` library is included in the `requirements.txt` file and is used to fetch stock market data with a slight delay (up to 15 minutes for the free tier).
+
 3. Install Node.js dependencies:
    ```bash
    cd src/dashboard
@@ -56,6 +58,38 @@ AI Tradesman is an AI-powered assistant designed to empower traders with smarter
 2. Use the market scanning feature to identify trading opportunities.
 3. Visualize trends and insights through interactive charts and heatmaps.
 4. Access AI-generated recommendations tailored to current market conditions.
+
+---
+
+## 🛠️ Data Fetching with Yahoo Finance (`yfinance`)
+
+The system now uses the `yfinance` library as its primary data provider for stock market data. Note that the data may have a 15-minute delay due to Yahoo Finance's limitations in the free tier.
+
+### Example Usage
+Here’s an example of how to fetch the latest stock data using our `YahooFinanceFetcher` class:
+```python
+from data_fetcher import YahooFinanceFetcher
+
+fetcher = YahooFinanceFetcher("AAPL")
+latest_data = fetcher.get_latest_data()
+print(latest_data)
+```
+
+### Simulate Real-Time Updates
+To run a simulation of real-time updates (fetching the latest available data periodically):
+```python
+import time
+from data_fetcher import YahooFinanceFetcher
+
+def simulate_realtime(symbol):
+    fetcher = YahooFinanceFetcher(symbol)
+    while True:
+        latest_data = fetcher.get_latest_data()
+        print(f"Latest Data for {symbol}:\n{latest_data}")
+        time.sleep(900)  # 15 minutes (900 seconds)
+
+simulate_realtime("AAPL")
+```
 
 ---
 
