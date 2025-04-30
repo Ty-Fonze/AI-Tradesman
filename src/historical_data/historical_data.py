@@ -30,19 +30,17 @@ def apply_schema():
 def fetch_and_store_data(ticker, start_date, end_date):
     """Fetches historical data for a given ticker and date range, then stores it in the SQLite database."""
     print(f"Fetching data for {ticker}...")
-    # Specify auto_adjust=False to ensure 'Adj Close' is included
+    # Set auto_adjust=False to include "Adj Close", but watch out for multi-level columns
     data = yf.download(ticker, start=start_date, end=end_date, auto_adjust=False)
 
-    # Check for required columns before proceeding
-    required_columns = ["Open", "High", "Low", "Close", "Adj Close", "Volume"]
-    missing = [col for col in required_columns if col not in data.columns]
-    if missing:
-        raise KeyError(f"Missing column(s) in data: {missing}")
+    # If columns are multi-level (e.g. ("Open", "")), flatten them
+    if isinstance(data.columns, pd.MultiIndex):
+        data.columns = [col[0] for col in data.columns]
 
-    data.reset_index(inplace=True)
-    data["Ticker"] = ticker
+    # Confirm the columns are what you expect
+    print("Columns:", data.columns)
 
-    # Rename columns to match schema
+    # Rename columns to match table schema
     data.rename(columns={
         "Open": "open",
         "High": "high",
@@ -51,7 +49,24 @@ def fetch_and_store_data(ticker, start_date, end_date):
         "Adj Close": "adj_close",
         "Volume": "volume",
         "Date": "date"
-    }, inplace=True)
+    }, inplace=True, errors="ignore")
+
+    # Ensure we have the columns needed
+    required_columns = ["date", "open", "high", "low", "close", "adj_close", "volume"]
+    missing = [col for col in required_columns if col not in data.columns]
+    if missing:
+        raise KeyError(f"Missing column(s) in data after rename: {missing}")
+
+    data.reset_index(inplace=True)
+    if "Date" in data.columns:
+        data.rename(columns={"Date": "date"}, inplace=True)
+
+    # If the index was the date, 'date' should already be present
+    # If not, handle accordingly. For instance, set a date column in case it's missing:
+    if "date" not in data.columns:
+        data["date"] = data.index.astype(str)
+
+    data["ticker"] = ticker
 
     # Store in SQLite
     connection = sqlite3.connect(DATABASE_FILE)
