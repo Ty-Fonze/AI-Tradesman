@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS historical_data (
     high REAL,
     low REAL,
     close REAL,
-    adj_close REAL,  -- Ensure this column exists
+    adj_close REAL,
     volume INTEGER,
     UNIQUE(symbol, date)
 );
