@@ -1,3 +1,37 @@
+import os
+import sqlite3
+import yfinance as yf
+import pandas as pd
+
+
+def setup_database():
+    """
+    Sets up the SQLite database and initializes it with the schema from schema.sql.
+    """
+    # Determine the path to the schema.sql file
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    schema_path = os.path.join(base_dir, "schema.sql")
+
+    try:
+        print("Applying schema to database...")
+        # Read the schema and apply it to the SQLite database
+        with open(schema_path, "r") as schema_file:
+            schema = schema_file.read()
+
+        conn = sqlite3.connect("data.db")
+        cursor = conn.cursor()
+        cursor.executescript(schema)  # Apply the schema
+        conn.commit()
+        conn.close()
+        print("Schema applied successfully.")
+    except FileNotFoundError:
+        print(f"Error: schema.sql file not found at {schema_path}")
+    except sqlite3.Error as e:
+        print(f"SQLite error while applying schema: {e}")
+    except Exception as e:
+        print(f"Unexpected error while applying schema: {e}")
+
+
 def fetch_historical_data(symbol, start_date, end_date):
     """
     Fetches historical stock data for a given symbol and date range using Yahoo Finance.
@@ -13,23 +47,14 @@ def fetch_historical_data(symbol, start_date, end_date):
         # Fetch data with auto_adjust=False to include 'Adj Close'
         data = yf.download(symbol, start=start_date, end=end_date, auto_adjust=False)
 
-        # Print the columns for debugging
-        print(f"Fetched columns: {data.columns}")
+        # Print the first few rows of the data to verify the structure
+        print(data.head())
 
         if data.empty:
             raise ValueError("No data fetched. Check the symbol or date range.")
 
-        # Flatten multi-level columns if they exist
-        if isinstance(data.columns, pd.MultiIndex):
-            data.columns = [' '.join(col).strip() for col in data.columns]
-
-        # Check for required columns
-        required_columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
-        missing_columns = [col for col in required_columns if col not in data.columns]
-        if missing_columns:
-            raise KeyError(f"Missing columns in data: {missing_columns}")
-
-        # Reset index to ensure 'Date' is a column
+        # Flatten the DataFrame (reset column names to remove multi-level indexing)
+        data.columns = data.columns.droplevel(0) if isinstance(data.columns, pd.MultiIndex) else data.columns
         data.reset_index(inplace=True)
 
         conn = sqlite3.connect("data.db")
@@ -75,8 +100,21 @@ def fetch_historical_data(symbol, start_date, end_date):
         print("Data fetching and storage complete.")
         return data
     except KeyError as e:
-        print(f"KeyError: {e}")
+        print(f"KeyError: Missing column in data: {e}")
     except sqlite3.Error as e:
         print(f"SQLite error while inserting data: {e}")
     except Exception as e:
         print(f"Unexpected error while fetching data: {e}")
+
+
+if __name__ == "__main__":
+    # Initialize the database
+    setup_database()
+
+    # Example: Fetch historical data for AAPL from 2022-01-01 to 2022-12-31
+    symbol = "AAPL"
+    start_date = "2022-01-01"
+    end_date = "2022-12-31"
+
+    # Fetch and store data
+    data = fetch_historical_data(symbol, start_date, end_date)
