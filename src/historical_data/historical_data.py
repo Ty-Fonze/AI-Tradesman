@@ -62,6 +62,14 @@ def fetch_historical_data(symbol, start_date, end_date):
 
         # Insert data into the database
         for index, row in data.iterrows():
+            # Debugging: Print the types of each parameter
+            date_str = index.strftime("%Y-%m-%d")  # Convert date to string format
+            print(f"Inserting row: symbol={symbol}, date={date_str}, open={row['Open']}, high={row['High']}, "
+                  f"low={row['Low']}, close={row['Close']}, adj_close={row['Adj Close']}, volume={row['Volume']}")
+            print(f"Types: symbol={type(symbol)}, date={type(date_str)}, open={type(row['Open'])}, "
+                  f"high={type(row['High'])}, low={type(row['Low'])}, close={type(row['Close'])}, "
+                  f"adj_close={type(row['Adj Close'])}, volume={type(row['Volume'])}")
+
             cursor.execute(
                 """
                 INSERT INTO historical_data (symbol, date, open, high, low, close, adj_close, volume)
@@ -69,7 +77,7 @@ def fetch_historical_data(symbol, start_date, end_date):
                 """,
                 (
                     symbol,
-                    index.strftime("%Y-%m-%d"),  # Convert date to string format
+                    date_str,  # Ensure this is a string
                     row['Open'],
                     row['High'],
                     row['Low'],
