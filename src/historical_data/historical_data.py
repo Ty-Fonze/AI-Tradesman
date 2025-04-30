@@ -10,7 +10,6 @@ def apply_schema():
     connection = sqlite3.connect(DATABASE_FILE)
     cursor = connection.cursor()
 
-    # Example schema (adjust columns/types based on your needs)
     schema_sql = """
     CREATE TABLE IF NOT EXISTS stock_data (
         date TEXT,
@@ -31,7 +30,8 @@ def apply_schema():
 def fetch_and_store_data(ticker, start_date, end_date):
     """Fetches historical data for a given ticker and date range, then stores it in the SQLite database."""
     print(f"Fetching data for {ticker}...")
-    data = yf.download(ticker, start=start_date, end=end_date)
+    # Specify auto_adjust=False to ensure 'Adj Close' is included
+    data = yf.download(ticker, start=start_date, end=end_date, auto_adjust=False)
 
     # Check for required columns before proceeding
     required_columns = ["Open", "High", "Low", "Close", "Adj Close", "Volume"]
