@@ -11,16 +11,18 @@ def apply_schema():
     cursor = connection.cursor()
 
     schema_sql = """
-    CREATE TABLE IF NOT EXISTS stock_data (
-        date TEXT,
-        ticker TEXT,
+    CREATE TABLE IF NOT EXISTS historical_data (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        symbol TEXT NOT NULL,
+        date DATE NOT NULL,
         open REAL,
         high REAL,
         low REAL,
         close REAL,
         adj_close REAL,
-        volume INTEGER
-    )
+        volume INTEGER,
+        UNIQUE(symbol, date)
+    );
     """
     cursor.execute(schema_sql)
     connection.commit()
@@ -30,14 +32,19 @@ def apply_schema():
 def fetch_and_store_data(ticker, start_date, end_date):
     """Fetches historical data for a given ticker and date range, then stores it in the SQLite database."""
     print(f"Fetching data for {ticker}...")
-    # Set auto_adjust=False so 'Adj Close' is included
+    # Fetch data with auto_adjust=False to include 'Adj Close'
     data = yf.download(ticker, start=start_date, end=end_date, auto_adjust=False)
 
     # Flatten multi-level columns if present
     if isinstance(data.columns, pd.MultiIndex):
         data.columns = [col[0] for col in data.columns]
 
-    print("Columns:", data.columns)
+    print("Columns fetched:", data.columns)
+
+    # Ensure 'Adj Close' column exists, and if not, set it equal to 'Close'
+    if "Adj Close" not in data.columns:
+        print("'Adj Close' column is missing. Falling back to 'Close'.")
+        data["Adj Close"] = data["Close"]
 
     # Copy the current index to a 'date' column first
     data["date"] = data.index
@@ -61,12 +68,14 @@ def fetch_and_store_data(ticker, start_date, end_date):
     if missing:
         raise KeyError(f"Missing column(s) in data after rename: {missing}")
 
-    data["ticker"] = ticker
+    data["symbol"] = ticker
 
     # Insert data into SQLite
     connection = sqlite3.connect(DATABASE_FILE)
-    data.to_sql("stock_data", connection, if_exists="append", index=False)
+    data.to_sql("historical_data", connection, if_exists="append", index=False)
     connection.close()
+
+    print(f"Data for {ticker} from {start_date} to {end_date} stored successfully.")
 
 def main():
     if not os.path.exists(DATABASE_FILE):
@@ -75,7 +84,7 @@ def main():
 
     ticker_symbol = "AAPL"
     start = "2022-01-01"
-    end = "2023-01-01"
+    end = "2025-04-30"
 
     fetch_and_store_data(ticker_symbol, start, end)
 
