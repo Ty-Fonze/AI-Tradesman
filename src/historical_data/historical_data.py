@@ -57,7 +57,7 @@ def fetch_historical_data(symbol, start_date, end_date):
                 row['Low'],
                 row['Close'],
                 row['Adj Close'],  # Ensure 'Adj Close' column is used
-                int(row['Volume'].iloc[0]),
+                int(row['Volume']) if not isinstance(row['Volume'], pd.Series) else int(row['Volume'].iloc[0]),
             )
         )
 
