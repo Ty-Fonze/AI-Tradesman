@@ -51,7 +51,7 @@ def fetch_historical_data(symbol, start_date, end_date):
             """,
             (
                 symbol,
-                index.date(),
+                index.strftime("%Y-%m-%d"),
                 row['Open'],
                 row['High'],
                 row['Low'],
