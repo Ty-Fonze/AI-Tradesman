@@ -53,22 +53,30 @@ def fetch_historical_data(symbol, start_date, end_date):
         if data.empty:
             raise ValueError("No data fetched. Check the symbol or date range.")
 
-        # Check if 'Adj Close' exists
-        if 'Adj Close' not in data.columns:
-            raise ValueError("'Adj Close' column is missing in the data fetched. Check the stock symbol or date range.")
+        # Flatten the DataFrame (reset column names to remove multi-level indexing)
+        data.columns = data.columns.droplevel(0) if isinstance(data.columns, pd.MultiIndex) else data.columns
+        data.reset_index(inplace=True)
 
         conn = sqlite3.connect("data.db")
         cursor = conn.cursor()
 
         # Insert data into the database
-        for index, row in data.iterrows():
-            # Debugging: Print the types of each parameter
-            date_str = index.strftime("%Y-%m-%d")  # Convert date to string format
-            print(f"Inserting row: symbol={symbol}, date={date_str}, open={row['Open']}, high={row['High']}, "
-                  f"low={row['Low']}, close={row['Close']}, adj_close={row['Adj Close']}, volume={row['Volume']}")
-            print(f"Types: symbol={type(symbol)}, date={type(date_str)}, open={type(row['Open'])}, "
-                  f"high={type(row['High'])}, low={type(row['Low'])}, close={type(row['Close'])}, "
-                  f"adj_close={type(row['Adj Close'])}, volume={type(row['Volume'])}")
+        for _, row in data.iterrows():
+            # Extract scalar values
+            date_str = row['Date'].strftime("%Y-%m-%d") if isinstance(row['Date'], pd.Timestamp) else row['Date']
+            open_val = float(row['Open'])
+            high_val = float(row['High'])
+            low_val = float(row['Low'])
+            close_val = float(row['Close'])
+            adj_close_val = float(row['Adj Close'])
+            volume_val = int(row['Volume'])
+
+            # Debugging: Print the row being inserted
+            print(f"Inserting row: symbol={symbol}, date={date_str}, open={open_val}, high={high_val}, "
+                  f"low={low_val}, close={close_val}, adj_close={adj_close_val}, volume={volume_val}")
+            print(f"Types: symbol={type(symbol)}, date={type(date_str)}, open={type(open_val)}, "
+                  f"high={type(high_val)}, low={type(low_val)}, close={type(close_val)}, "
+                  f"adj_close={type(adj_close_val)}, volume={type(volume_val)}")
 
             cursor.execute(
                 """
@@ -78,12 +86,12 @@ def fetch_historical_data(symbol, start_date, end_date):
                 (
                     symbol,
                     date_str,  # Ensure this is a string
-                    row['Open'],
-                    row['High'],
-                    row['Low'],
-                    row['Close'],
-                    row['Adj Close'],
-                    int(row['Volume']) if not isinstance(row['Volume'], pd.Series) else int(row['Volume'].iloc[0]),
+                    open_val,
+                    high_val,
+                    low_val,
+                    close_val,
+                    adj_close_val,
+                    volume_val,
                 )
             )
 
