@@ -26,3 +26,5 @@ env/
 # Miscellaneous
 *.swp
 *~
+# Ignore SQLite database file
+stock_data.db
