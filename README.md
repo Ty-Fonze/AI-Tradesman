@@ -1,6 +1,6 @@
 # 📈 AI Tradesman - Your Stock Market Assistant
 
-AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides critical insights for trading and investment decisions.
+AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides actionable insights for traders.
 
 ---
 
@@ -61,35 +61,39 @@ AI Tradesman is an AI-powered assistant designed to empower traders with smarter
 
 ---
 
-## 🛠️ Data Fetching with Yahoo Finance (`yfinance`)
+## 🛠️ Data Fetching and Database
 
-The system now uses the `yfinance` library as its primary data provider for stock market data. Note that the data may have a 15-minute delay due to Yahoo Finance's limitations in the free tier.
+### Data Fetching with Yahoo Finance (`yfinance`)
+The system uses the `yfinance` library as its primary data provider for stock market data. Note that the data may have a 15-minute delay due to Yahoo Finance's limitations in the free tier.
+
+- **Historical Data**: The script fetches historical stock data using `yfinance` and stores it in a local SQLite database (`tradesman.db`).
+- **Schema Setup**: The database includes a `stock_data` table to store fields like `date`, `ticker`, `open`, `close`, `volume`, etc.
 
 ### Example Usage
-Here’s an example of how to fetch the latest stock data using our `YahooFinanceFetcher` class:
+Here’s an example of how to fetch and store data programmatically:
 ```python
-from data_fetcher import YahooFinanceFetcher
+from src.historical_data.historical_data import fetch_and_store_data
 
-fetcher = YahooFinanceFetcher("AAPL")
-latest_data = fetcher.get_latest_data()
-print(latest_data)
+# Fetch and store data for Apple stock from 2022 to 2023
+fetch_and_store_data("AAPL", "2022-01-01", "2023-01-01")
 ```
 
-### Simulate Real-Time Updates
-To run a simulation of real-time updates (fetching the latest available data periodically):
+### Simulated Real-Time Updates
+To simulate real-time updates (fetching the latest available data periodically):
 ```python
-import time
-from data_fetcher import YahooFinanceFetcher
-
-def simulate_realtime(symbol):
-    fetcher = YahooFinanceFetcher(symbol)
-    while True:
-        latest_data = fetcher.get_latest_data()
-        print(f"Latest Data for {symbol}:\n{latest_data}")
-        time.sleep(900)  # 15 minutes (900 seconds)
+from src.historical_data.historical_data import simulate_realtime
 
 simulate_realtime("AAPL")
 ```
+
+---
+
+### Managing the Database File (`tradesman.db`)
+- **Location**: The database file is stored locally in the directory where the script is executed.
+- **Verification**: Use tools like SQLite CLI, DB Browser for SQLite, or Python scripts to inspect its contents.
+- **Recreation**: The file can be recreated by running the script if deleted.
+
+> **Important**: The `tradesman.db` file is not included in the repository to avoid version control issues. You can generate it by running the scripts provided.
 
 ---
 
