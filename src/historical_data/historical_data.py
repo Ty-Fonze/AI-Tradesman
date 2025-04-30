@@ -69,7 +69,7 @@ def fetch_historical_data(symbol, start_date, end_date):
                 """,
                 (
                     symbol,
-                    index.strftime("%Y-%m-%d"),  # Convert date to string
+                    index.strftime("%Y-%m-%d"),  # Convert date to string format
                     row['Open'],
                     row['High'],
                     row['Low'],
