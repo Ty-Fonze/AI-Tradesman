@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const appContainer = document.getElementById('app');
 
-  // Check that electronAPI is defined
+  // Check if the API is defined and use it
   if (window.electronAPI && typeof window.electronAPI.renderLiveTicker === 'function') {
     const liveTickerWidget = window.electronAPI.renderLiveTicker();
     appContainer.appendChild(liveTickerWidget);
