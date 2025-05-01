@@ -1,0 +1,21 @@
+.widget {
+    position: absolute;
+    width: 200px;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    cursor: grab;
+    transition: background-color 0.3s ease;
+}
+
+.widget.dark {
+    background-color: #333;
+    color: white;
+}
+
+.widget.light {
+    background-color: white;
+    color: black;
+}
