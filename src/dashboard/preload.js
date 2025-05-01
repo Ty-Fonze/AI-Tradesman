@@ -1,8 +1,5 @@
 const { contextBridge } = require('electron');
-const path = require('path');
-
-// Load the live_ticker module
-const liveTicker = require(path.join(__dirname, 'widgets/live_ticker'));
+const liveTicker = require('./widgets/live_ticker'); // Use relative path
 
 // Expose the liveTicker functionality to the renderer process
 contextBridge.exposeInMainWorld('electronAPI', {
