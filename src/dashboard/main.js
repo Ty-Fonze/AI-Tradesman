@@ -9,9 +9,10 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       enableRemoteModule: false,
-      nodeIntegration: false
-    }
+      nodeIntegration: false,
+    },
   });
+
   mainWindow.loadFile('index.html');
 }
 
