@@ -8,10 +8,10 @@ app.on('ready', () => {
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'), // Correct path
-      contextIsolation: true, // Isolate context for security
-      enableRemoteModule: false, // Disable deprecated remote module
-      nodeIntegration: false, // Keep this off for security
+      preload: path.join(__dirname, 'preload.js'), // Ensure this path is correct
+      contextIsolation: true,
+      enableRemoteModule: false,
+      nodeIntegration: false,
     },
   });
 
