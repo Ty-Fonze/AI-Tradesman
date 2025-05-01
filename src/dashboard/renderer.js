@@ -1,4 +1,9 @@
+const { renderLiveTicker } = require('./widgets/live_ticker');
+
 document.addEventListener('DOMContentLoaded', () => {
-  const appTitle = document.getElementById('app-title');
-  appTitle.textContent = "Welcome to the Warhammer-Themed Trading Dashboard!";
+    const appContainer = document.getElementById('app');
+
+    // Add the Live Market Ticker Widget to the dashboard
+    const liveTickerWidget = renderLiveTicker();
+    appContainer.appendChild(liveTickerWidget);
 });
