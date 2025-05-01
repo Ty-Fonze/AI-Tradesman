@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Tradesman Dashboard</title>
+  <style>
+    .live-ticker {
+      display: flex;
+      gap: 10px;
+    }
+    .ticker-item {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>
-
-  <!-- Make sure this script is included so 'window.electronAPI' is used in the renderer -->
   <script src="renderer.js"></script>
 </body>
 </html>
