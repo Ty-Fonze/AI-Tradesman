@@ -1,4 +1,4 @@
-const { renderLiveTicker } = require('./widgets/live_ticker');
+const renderLiveTicker = window.electronAPI.require('./widgets/live_ticker').renderLiveTicker;
 
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app');
