@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './theme.css';
+import '../styles/theme.css';
 
 const Widget = () => {
     const [position, setPosition] = useState({ x: 100, y: 100 });
