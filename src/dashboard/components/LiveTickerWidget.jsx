@@ -6,12 +6,17 @@ const Widget = () => {
     const [theme, setTheme] = useState('light');
 
     const handleDrag = (e) => {
-        setPosition({ x: e.clientX, y: e.clientY });
+        if (e.clientX && e.clientY) {
+            setPosition({ x: e.clientX, y: e.clientY });
+        }
     };
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
     };
+
+    console.log('Position:', position);
+    console.log('Theme:', theme);
 
     return (
         <div
