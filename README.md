@@ -1,6 +1,6 @@
 # 📈 AI Tradesman - Your Stock Market Assistant
 
-AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides actionable insights for traders.
+AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides actionable insights and a streamlined trading experience.
 
 ---
 
@@ -12,6 +12,26 @@ AI Tradesman is an AI-powered assistant designed to empower traders with smarter
 - **Sector Analysis**: Track sector performance and correlations between stocks and indices.
 - **Interactive Dashboard**: Visualize insights and interact with AI-generated recommendations.
 - **Educational Guidance**: Learn trading strategies with mentor-mode explanations and tips.
+
+---
+
+## 🛠️ Current Progress
+### Backend
+- **AI Integration**: Backend AI is functional and ready for integration with the frontend.
+- **Real-Time Monitoring**: Redis-based system fetches live stock data and triggers alerts based on predefined thresholds.
+- **Data Handling**:
+  - Historical stock data is stored in a local SQLite database.
+  - Real-time stock data is stored in Redis for fast access and periodic updates.
+- **APIs**: Flask-SocketIO is set up for real-time communication between the backend and frontend.
+
+### Frontend
+- **React Dashboard**:
+  - The base dashboard is implemented using React and Electron.
+  - Widgets like `LiveTickerWidget` are functional and display dynamic content.
+- **Planned Enhancements**:
+  - Movable and scalable widgets using libraries like `react-grid-layout`.
+  - A central widget to serve as the "host dashboard."
+  - AI backend integration for dynamic widget interaction.
 
 ---
 
@@ -33,8 +53,6 @@ AI Tradesman is an AI-powered assistant designed to empower traders with smarter
    ```bash
    pip install -r requirements.txt
    ```
-
-   > **Note**: The `yfinance` library is included in the `requirements.txt` file and is used to fetch stock market data with a slight delay (up to 15 minutes for the free tier).
 
 3. Install additional dependencies for real-time monitoring:
    ```bash
@@ -67,18 +85,17 @@ AI Tradesman is an AI-powered assistant designed to empower traders with smarter
 ## 💡 Usage
 
 ### Real-Time Monitoring
-The Redis-based real-time monitoring module fetches live stock data, stores it in Redis, and triggers alerts based on predefined thresholds.
+The Redis-based real-time monitoring module fetches live stock data, stores it in Redis, and triggers alerts based on thresholds.
 
 1. Start the monitoring script:
    ```bash
    python src/realtime_data/main.py
    ```
-   - This will fetch stock data periodically and store it in Redis.
-
+   
 2. Check for alerts:
    - Alerts will be printed to the console if a stock price exceeds a threshold.
    - Example:
-     ```
+     ```plaintext
      🚨 Alert: AAPL price is above 175 -> 176.5
      ```
 
@@ -91,33 +108,7 @@ The Redis-based real-time monitoring module fetches live stock data, stores it i
 
 ---
 
-## 🛠️ Data Fetching and Database
-
-### Data Fetching with Yahoo Finance (`yfinance`)
-The system uses the `yfinance` library as its primary data provider for stock market data. Note that the data may have a 15-minute delay due to Yahoo Finance's limitations in the free tier.
-
-- **Historical Data**: The script fetches historical stock data using `yfinance` and stores it in a local SQLite database (`tradesman.db`).
-- **Real-Time Data**: Real-time stock data is fetched and stored in Redis for fast access and periodic updates.
-
-### Example Usage
-Here’s an example of how to fetch and store historical data programmatically:
-```python
-from src.historical_data.historical_data import fetch_and_store_data
-
-# Fetch and store data for Apple stock from 2022 to 2023
-fetch_and_store_data("AAPL", "2022-01-01", "2023-01-01")
-```
-
-To simulate real-time updates:
-```python
-from src.historical_data.historical_data import simulate_realtime
-
-simulate_realtime("AAPL")
-```
-
----
-
-## 📅 Roadmap
+## ⚙️ Planned Enhancements
 - **Phase 1**: Core features like market scanning, data analysis, and multi-timeframe insights.
 - **Phase 2**: Advanced tools such as sector analysis and heatmaps.
 - **Phase 3**: Redis-based real-time monitoring and alerting system. ✅
