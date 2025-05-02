@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './dashboard/App'; // Adjust path based on your App.jsx location
+import ReactDOM from 'react-dom/client'; // Use ReactDOM from 'react-dom/client'
+import App from './dashboard/App'; // Adjust this path if necessary
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root')); // Create a root
+root.render(<App />); // Use the new render method
