@@ -1,12 +1,11 @@
 import React from 'react';
-import Widget from './components/LiveTickerWidget';
 
-const App = () => {
+const LiveTickerWidget = () => {
     return (
         <div>
-            <Widget />
+            <h1>Live Ticker Widget</h1>
         </div>
     );
 };
 
-export default App;
+export default LiveTickerWidget;
