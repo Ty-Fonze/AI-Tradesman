@@ -1,7 +1,7 @@
 {
   "name": "widget-app",
   "version": "1.0.0",
-  "main": "src/dashboard/index.jsx",
+  "main": "src/index.jsx",
   "scripts": {
     "start": "react-scripts start",
     "electron": "electron .",
