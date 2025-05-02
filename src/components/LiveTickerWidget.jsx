@@ -1,9 +1,9 @@
 import React from 'react';
 
-const LiveTickerWidget = () => {
+const LiveTickerWidget = ({ title }) => {
     return (
         <div>
-            <h2>Live Ticker Widget</h2>
+            <h2>{title}</h2>
         </div>
     );
 };
