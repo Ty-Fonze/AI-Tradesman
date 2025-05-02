@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Widget from './components/LiveTickerWidget';
 
-const Widget = () => {
+const App = () => {
     return (
         <div>
-            <h3>Test Widget</h3>
+            <Widget />
         </div>
     );
 };
 
-export default Widget;
+export default App;
