@@ -1,10 +1,9 @@
 import React from 'react';
-import Widget from './components/LiveTickerWidget';
 
 const App = () => {
     return (
         <div>
-            <Widget />
+            <h1>Hello, React!</h1>
         </div>
     );
 };
