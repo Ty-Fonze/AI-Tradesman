@@ -136,6 +136,23 @@ We welcome contributions! To contribute:
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
 
 ---
+[ Market APIs ]            [ News APIs ]            [ Product Docs ]
+       |                        |                         |
+       +------------------------+-------------------------+
+                                |
+                         [ Unified API Layer ]
+                        /     |      |      \
+                [Portfolio] [Alerts] [News] [Education/Help]
+                        \     |      |      /
+                         [ Event/Notification Bus ]
+                                |
+                        [ Context Aggregator ]
+                                |
+             +------------------+-------------------+
+             |                                      |
+    [React/Electron UI]                   [AI Assistant Service]
+             |                                      |
+           [User]                                 [User]
 
 ## 📬 Contact
 For questions, feedback, or support, reach out to [Ty-Fonze](https://github.com/Ty-Fonze).
