@@ -1,158 +1,128 @@
 # 📈 AI Tradesman - Your Stock Market Assistant
 
-AI Tradesman is an AI-powered assistant designed to empower traders with smarter decision-making capabilities. By leveraging real-time market data, technical analysis, and advanced AI tools, it provides actionable insights and a streamlined trading experience.
+AI Tradesman empowers traders with AI-driven insights, real-time data, and an interactive dashboard for smarter decision-making.
 
 ---
 
 ## 🚀 Features
-- **Market Scanning**: Identify high-performing or underperforming stocks using technical and fundamental indicators.
-- **Multi-Timeframe Analysis**: Analyze trends across daily, 4-hour, and 15-minute charts.
-- **Real-Time Insights**: Detect market regimes (bullish, bearish, or sideways) and adapt strategies.
-- **Redis-Based Real-Time Monitoring**: Fetch and store stock data in Redis for periodic updates and alerts.
-- **Sector Analysis**: Track sector performance and correlations between stocks and indices.
-- **Interactive Dashboard**: Visualize insights and interact with AI-generated recommendations.
-- **Educational Guidance**: Learn trading strategies with mentor-mode explanations and tips.
+- **Market Scanning**: Identify top gainers/losers using technical and fundamental indicators.  
+- **Multi-Timeframe Analysis**: Trends on daily, 4-hour, and 15-minute charts.  
+- **Real-Time Alerts**: Threshold-based alerts via Redis and notifications.  
+- **Sector & Correlation Analysis**: Track sector performance and stock-index correlations.  
+- **Interactive Dashboard**: React/Electron UI with movable widgets and AI recommendations.  
+- **Educational Mentor Mode**: In-depth explanations of strategies and indicators.
 
 ---
 
-## 🛠️ Current Progress
+## 🏗️ Current Progress
+
+### MongoDB Integration
+- Installed MongoDB & MongoDB Compass  
+- Added MongoDB `bin` to system PATH  
+- Verified `mongod` runs on port 27017  
+- Inserted test stock data (`AAPL`, `TSLA`) via Python scripts  
+- Confirmed data in MongoDB Compass  
+
 ### Backend
-- **AI Integration**: Backend AI is functional and ready for integration with the frontend.
-- **Real-Time Monitoring**: Redis-based system fetches live stock data and triggers alerts based on predefined thresholds.
-- **Data Handling**:
-  - Historical stock data is stored in a local SQLite database.
-  - Real-time stock data is stored in Redis for fast access and periodic updates.
-- **APIs**: Flask-SocketIO is set up for real-time communication between the backend and frontend.
+- **AI Engine**: Ready for frontend integration  
+- **Real-Time Monitoring**: Redis-based data fetch & alerting  
+- **Data Storage**:  
+  - Historical data in SQLite  
+  - Real-time snapshots in Redis  
+  - Structured stock data in MongoDB  
 
 ### Frontend
-- **React Dashboard**:
-  - The base dashboard is implemented using React and Electron.
-  - Widgets like `LiveTickerWidget` are functional and display dynamic content.
-- **Planned Enhancements**:
-  - Movable and scalable widgets using libraries like `react-grid-layout`.
-  - A central widget to serve as the "host dashboard."
-  - AI backend integration for dynamic widget interaction.
+- **React/Electron Dashboard**: Base UI implemented  
+- **Widgets**: `LiveTickerWidget` functional  
+- **To-Do**:  
+  - Add `public/index.html` for frontend build  
+  - Integrate AI backend endpoints  
 
 ---
 
-## 🛠️ Installation and Setup
+## 🛠️ Installation & Setup
 
 ### Prerequisites
-1. Install Python (≥ 3.8) and Node.js (≥ 14.x).
-2. Obtain API keys from stock data providers (e.g., Alpha Vantage, Yahoo Finance).
-3. Ensure that a Redis server is running locally or remotely.
+- Python ≥ 3.8  
+- Node.js ≥ 14.x  
+- MongoDB Server (8.x) & MongoDB Compass  
+- Redis Server  
+- API keys for chosen data providers
 
-### Steps
-1. Clone the repository:
+### Setup Steps
+1. **Clone the repo**  
    ```bash
    git clone https://github.com/Ty-Fonze/AI-Tradesman.git
    cd AI-Tradesman
-   ```
 
-2. Install Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Python dependencies
 
-3. Install additional dependencies for real-time monitoring:
-   ```bash
-   pip install -r src/realtime_data/requirements.txt
-   ```
+pip install -r requirements.txt
 
-4. Install Node.js dependencies:
-   ```bash
-   cd src/dashboard
-   npm install
-   ```
+Redis dependencies
 
-5. Configure API keys:
-   - Copy `config/api_keys_template.json` to `config/api_keys.json`.
-   - Add your API keys.
+pip install -r src/realtime_data/requirements.txt
 
-6. Run the backend:
-   ```bash
-   python src/dashboard/app.py
-   ```
+Node.js dependencies
 
-7. Start the frontend:
-   ```bash
-   cd src/dashboard
-   npm start
-   ```
+cd src/dashboard
+npm install
 
----
+Configure API keys
 
-## 💡 Usage
+cp config/api_keys_template.json config/api_keys.json
+# Edit config/api_keys.json with your keys
 
-### Real-Time Monitoring
-The Redis-based real-time monitoring module fetches live stock data, stores it in Redis, and triggers alerts based on thresholds.
+MongoDB
 
-1. Start the monitoring script:
-   ```bash
-   python src/realtime_data/main.py
-   ```
-   
-2. Check for alerts:
-   - Alerts will be printed to the console if a stock price exceeds a threshold.
-   - Example:
-     ```plaintext
-     🚨 Alert: AAPL price is above 175 -> 176.5
-     ```
+Create data directory:
 
-3. Verify Redis storage:
-   - Use `redis-cli` to inspect stored data:
-     ```bash
-     redis-cli
-     keys *
-     ```
+mkdir C:\data\db
 
----
+Start MongoDB:
 
-## ⚙️ Planned Enhancements
-- **Phase 1**: Core features like market scanning, data analysis, and multi-timeframe insights.
-- **Phase 2**: Advanced tools such as sector analysis and heatmaps.
-- **Phase 3**: Redis-based real-time monitoring and alerting system. ✅
-- **Phase 4**: Interactive tools like scenario simulations and emotional decision trackers.
-- **Phase 5**: Personalization and educational features such as mentor mode.
+mongod --dbpath C:\data\db
 
----
+(Optional) Connect with Compass: mongodb://localhost:27017
 
-## 🤝 Contributing
-We welcome contributions! To contribute:
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Description of changes"
-   ```
-4. Push your branch and open a pull request.
+💡 Testing MongoDB
 
----
+Insert Test Data
 
-## 📜 License
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
+cd backend
+python test_insert_mongo.py
+python test_insert_mongo_2.py
 
----
-[ Market APIs ]            [ News APIs ]            [ Product Docs ]
-       |                        |                         |
-       +------------------------+-------------------------+
-                                |
-                         [ Unified API Layer ]
-                        /     |      |      \
-                [Portfolio] [Alerts] [News] [Education/Help]
-                        \     |      |      /
-                         [ Event/Notification Bus ]
-                                |
-                        [ Context Aggregator ]
-                                |
-             +------------------+-------------------+
-             |                                      |
-    [React/Electron UI]                   [AI Assistant Service]
-             |                                      |
-           [User]                                 [User]
+Verify in Compass
 
-## 📬 Contact
-For questions, feedback, or support, reach out to [Ty-Fonze](https://github.com/Ty-Fonze).
+Database: StockData
+
+Collection: quotes
+
+⚙️ Next Milestones
+
+Automate real-time Webull data ingestion → MongoDB
+
+Enhance stock query APIs
+
+Refine MongoDB schema (indexes, partitions)
+
+Build AI-driven recommendation widgets
+
+Deploy full stack (Electron + Python)
+
+🤝 Contributing
+
+Fork & branch
+
+Commit changes
+
+Open a PR
+
+📜 License
+
+MIT License. See LICENSE.
+
+📬 Contact
+
+Questions or feedback? Reach out to Ty-Fonze.
