@@ -20,16 +20,27 @@ def get_stock_price(symbol: str, region: str = "US"):
     else:
         try:
             ticker = yf.Ticker(symbol)
-            price = ticker.info.get('regularMarketPrice')
-            name = ticker.info.get('shortName')
-            return {
-                "symbol": symbol,
-                "price": price,
-                "name": name,
-                "exchange": "US",
-                "realtime": False,
-                "delay_minutes": 15
-            }
+            hist = ticker.history(period="1d")
+            price = None
+            if not hist.empty:
+                price = hist['Close'][0]
+            name = symbol
+            # Try to get name from either fast_info or info
+            if hasattr(ticker, "fast_info") and getattr(ticker, "fast_info", None):
+                name = ticker.fast_info.get("shortName", symbol)
+            elif hasattr(ticker, "info") and ticker.info:
+                name = ticker.info.get('shortName', symbol)
+            if price is not None:
+                return {
+                    "symbol": symbol,
+                    "price": float(price),
+                    "name": name,
+                    "exchange": "US",
+                    "realtime": False,
+                    "delay_minutes": 15
+                }
+            else:
+                return {"error": "Price data not found for symbol"}
         except Exception as e:
             return {"error": str(e)}
     return None
